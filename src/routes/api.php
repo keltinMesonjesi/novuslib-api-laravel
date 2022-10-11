@@ -15,8 +15,10 @@ use \App\Http\Controllers\Auth\RegisterController;
 |
 */
 
-Route::post('/auth/register', [RegisterController::class, 'register']);
+Route::prefix('v1')->group(function () {
+    Route::post('/auth/register', [RegisterController::class, 'register']);
 
-Route::middleware('auth:sanctum')->get('/profile', function (Request $request) {
-    return $request->user();
+    Route::middleware('auth:sanctum')->get('/profile', function (Request $request) {
+        return $request->user();
+    });
 });
