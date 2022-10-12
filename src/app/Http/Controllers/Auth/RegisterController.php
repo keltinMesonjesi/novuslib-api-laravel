@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseStatusCode;
 
 class RegisterController extends Controller
 {
     /**
      * Register user
      * @param Request $request
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function register(Request $request) : Response {
+    public function register(Request $request): \Illuminate\Http\JsonResponse
+    {
         $fields = $request->validate([
             'username' => 'required|string|max:50',
             'email' => 'required|string|unique:users,email|max:100',
@@ -42,11 +44,16 @@ class RegisterController extends Controller
 
         $token = $user->createToken('myapptoken')->plainTextToken;
 
-        $response = [
-            'user' => $user,
-            'token' => $token
+        $responseData = [
+            'resource' => new UserResource($user),
+            'options' => [
+                'token' => $token
+            ]
         ];
 
-        return response($response, 201);
+        return response()->json([
+            'status' => 'success',
+            'data' => $responseData
+        ], ResponseStatusCode::HTTP_CREATED);
     }
 }

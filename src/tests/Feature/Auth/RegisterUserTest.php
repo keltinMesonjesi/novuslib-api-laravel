@@ -4,30 +4,31 @@ namespace Tests\Feature\Auth;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Symfony\Component\HttpFoundation\Response as ResponseStatusCode;
 use Tests\TestCase;
 
 class RegisterUserTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
-    private function generateUserData() : array {
+    private function generateUserData(): array
+    {
         $password = $this->faker->password;
         return [
-            'username'              => $this->faker->userName,
-            'email'                 => $this->faker->email,
-            'password'              => $password,
+            'username' => $this->faker->userName,
+            'email' => $this->faker->email,
+            'password' => $password,
             'password_confirmation' => $password,
-            'firstname'             => $this->faker->firstName,
-            'lastname'              => $this->faker->lastName,
-            'phone_number'          => $this->faker->phoneNumber,
-            'address'               => $this->faker->address,
+            'firstname' => $this->faker->firstName,
+            'lastname' => $this->faker->lastName,
+            'phone_number' => $this->faker->phoneNumber,
+            'address' => $this->faker->address,
         ];
     }
 
     /**
      * @test
-     * A basic feature test example.
-     *
+     * Testing successful user registration.
      * @return void
      */
     public function user_can_register()
@@ -36,25 +37,49 @@ class RegisterUserTest extends TestCase
 
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(201);
+        $response->assertStatus(ResponseStatusCode::HTTP_CREATED);
         $response->assertSee('token');
         $response->assertSee('id');
         $response->assertJson([
-            'user' => [
-                'username' => $data['username'],
-                'email' => $data['email'],
+            'status' => 'success',
+            'data' => [
+                'resource' => [
+                    'type' => 'user',
+                    'attributes' => [
+                        'username' => $data['username'],
+                        'email' => $data['email'],
+                        'detail' => [
+                            'firstname' => $data['firstname'],
+                            'lastname' => $data['lastname'],
+                            'phone_number' => $data['phone_number'],
+                            'address' => $data['address'],
+                        ]
+                    ]
+                ],
             ],
         ]);
         $response->assertJsonStructure([
-            'user' => [
-                'username',
-                'email',
-                'updated_at',
-                'created_at',
-                'id'
-            ],
-            'token'
+            'status',
+            'data' => [
+                'resource' => [
+                    'type',
+                    'id',
+                    'attributes' => [
+                        'username',
+                        'email',
+                        'detail' => [
+                            'firstname',
+                            'lastname',
+                            'phone_number',
+                            'address',
+                        ]
+                    ]
+                ],
+                'options' => [
+                    'token'
+                ]
+            ]
         ]);
-        $this->assertNotEmpty($response['token'], 'Token is empty');
+        $this->assertNotEmpty($response['data']['options']['token'], 'Token is empty');
     }
 }
