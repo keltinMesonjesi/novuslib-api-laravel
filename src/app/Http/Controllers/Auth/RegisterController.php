@@ -7,7 +7,9 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response as ResponseStatusCode;
+use App\Http\Utility\HttpResponse as HttpResponseUtility;
 
 class RegisterController extends Controller
 {
@@ -28,32 +30,39 @@ class RegisterController extends Controller
             'address' => 'required|string|max:255'
         ]);
 
-        $user = User::create([
-            'username' => $fields['username'],
-            'email' => $fields['email'],
-            'password' => bcrypt($fields['password'])
-        ]);
+        DB::beginTransaction();
 
-        UserDetail::create([
-            'user_id' => $user->id,
-            'firstname' => $fields['firstname'],
-            'lastname' => $fields['lastname'],
-            'phone_number' => $fields['phone_number'],
-            'address' => $fields['address'],
-        ]);
+        try {
 
-        $token = $user->createToken('myapptoken')->plainTextToken;
+            $user = User::create([
+                'username' => $fields['username'],
+                'email' => $fields['email'],
+                'password' => bcrypt($fields['password'])
+            ]);
 
-        $responseData = [
-            'resource' => new UserResource($user),
-            'options' => [
-                'token' => $token
-            ]
-        ];
+            UserDetail::create([
+                'user_id' => $user->id,
+                'firstname' => $fields['firstname'],
+                'lastname' => $fields['lastname'],
+                'phone_number' => $fields['phone_number'],
+                'address' => $fields['address'],
+            ]);
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $responseData
-        ], ResponseStatusCode::HTTP_CREATED);
+            $token = $user->createToken('myapptoken')->plainTextToken;
+
+            $responseData = [
+                'resource' => new UserResource($user),
+                'options' => [
+                    'token' => $token
+                ]
+            ];
+
+            return (new HttpResponseUtility($responseData, '', ResponseStatusCode::HTTP_CREATED))->getJsonResponse();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return (new HttpResponseUtility([], $e->getMessage()))->getJsonResponse();
+
+        }
     }
 }
