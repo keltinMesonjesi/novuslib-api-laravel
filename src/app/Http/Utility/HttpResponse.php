@@ -1,7 +1,8 @@
 <?php
 namespace App\Http\Utility;
 use Symfony\Component\HttpFoundation\Response as ResponseStatusCode;
-class HttpResponse {
+class HttpResponse
+{
 
     private $SUCCESS = 'success';
     public $FAILED = 'failed';
