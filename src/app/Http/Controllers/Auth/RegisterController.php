@@ -6,9 +6,10 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\UserDetail;
-use Illuminate\Http\Request;
+use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\ApiException;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseStatusCode;
 use App\Http\Utility\HttpResponse as HttpResponseUtility;
 
@@ -16,25 +17,17 @@ class RegisterController extends Controller
 {
     /**
      * Register user
-     * @param Request $request
+     * @param RegisterRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register(Request $request): \Illuminate\Http\JsonResponse
+    public function register(RegisterRequest $request): \Illuminate\Http\JsonResponse
     {
 
         DB::beginTransaction();
 
         try {
 
-            $fields = $request->validate([
-                'username' => 'required|string|unique:users,username|max:50',
-                'email' => 'required|string|unique:users,email|max:100',
-                'password' => 'required|string|confirmed|max:255',
-                'firstname' => 'required|string|max:50',
-                'lastname' => 'required|string|max:50',
-                'phone_number' => 'required|string|max:40',
-                'address' => 'required|string|max:255'
-            ]);
+            $fields = $request->validated();
 
             $user = User::create([
                 'username' => $fields['username'],
@@ -62,8 +55,8 @@ class RegisterController extends Controller
             DB::commit();
             return (new HttpResponseUtility($responseData, '', ResponseStatusCode::HTTP_CREATED))->getJsonResponse();
 
-        } catch (ApiException $apiExce) {
-            return (new HttpResponseUtility([], $apiExce->getMessage(), $apiExce->getCode()))->getJsonResponse();
+        } catch (ApiException $apiExcep) {
+            return (new HttpResponseUtility([], $apiExcep->getMessage(), $apiExcep->getCode()))->getJsonResponse();
         } catch (\Exception $e) {
             DB::rollBack();
             return (new HttpResponseUtility([], 'An error has ocurred'))->getJsonResponse();
