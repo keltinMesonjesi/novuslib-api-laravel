@@ -40,6 +40,7 @@ class RegisterUserTest extends TestCase
         $response->assertStatus(ResponseStatusCode::HTTP_CREATED);
         $response->assertSee('token');
         $response->assertSee('id');
+        $response->assertSee('uid');
         $response->assertJson([
             'status' => 'success',
             'data' => [
@@ -64,6 +65,7 @@ class RegisterUserTest extends TestCase
                 'resource' => [
                     'type',
                     'id',
+                    'uid',
                     'attributes' => [
                         'username',
                         'email',
