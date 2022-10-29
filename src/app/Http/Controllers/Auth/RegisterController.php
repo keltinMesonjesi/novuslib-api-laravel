@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use Symfony\Component\HttpFoundation\Response as ResponseStatusCode;
 
-use App\Http\Utility\HttpLogicAction as HttpLogicActionUtility;
+use App\Utility\HttpLogicAction as HttpLogicActionUtility;
 use App\Services\UserService;
 
 class RegisterController extends Controller

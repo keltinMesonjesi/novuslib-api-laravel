@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Models\UserDetail;
+use App\Utility\Helper;
 
 class UserService
 {
@@ -14,17 +15,18 @@ class UserService
     public static function create(array $fields)
     {
         $user = User::create([
+            'uid'      => Helper::generateUid(),
             'username' => $fields['username'],
-            'email' => $fields['email'],
+            'email'    => $fields['email'],
             'password' => bcrypt($fields['password'])
         ]);
 
         UserDetail::create([
-            'user_id' => $user->id,
-            'firstname' => $fields['firstname'],
-            'lastname' => $fields['lastname'],
+            'user_id'      => $user->id,
+            'firstname'    => $fields['firstname'],
+            'lastname'     => $fields['lastname'],
             'phone_number' => $fields['phone_number'],
-            'address' => $fields['address'],
+            'address'      => $fields['address'],
         ]);
 
         return $user;

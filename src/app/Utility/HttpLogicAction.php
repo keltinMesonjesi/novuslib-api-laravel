@@ -1,10 +1,10 @@
 <?php
-namespace App\Http\Utility;
+namespace App\Utility;
 
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\ApiException;
 use Symfony\Component\HttpFoundation\Response as ResponseStatusCode;
-use App\Http\Utility\HttpResponse as HttpResponseUtility;
+use App\Utility\HttpResponse as HttpResponseUtility;
 
 class HttpLogicAction
 {
@@ -16,6 +16,8 @@ class HttpLogicAction
 
     /**
      * Execute controller action logic inside try/catch structure with transaction
+     * @param function $actionLogic
+     * @return \Illuminate\Http\JsonResponse
      */
     public function executeActionWithDml($actionLogic): \Illuminate\Http\JsonResponse {
         DB::beginTransaction();

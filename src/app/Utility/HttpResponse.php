@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Utility;
+namespace App\Utility;
 use Symfony\Component\HttpFoundation\Response as ResponseStatusCode;
 class HttpResponse
 {
