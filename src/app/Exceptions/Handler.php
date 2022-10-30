@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
-use App\Http\Utility\HttpResponse as HttpResponseUtility;
+use App\Utility\HttpResponse as HttpResponseUtility;
 use Throwable;
 
 class Handler extends ExceptionHandler
