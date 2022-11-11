@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e)
     {
         if ($e instanceof ValidationException) {
-            return (new HttpResponseUtility([], 'A validation exception has ocurred', $e->status))->getJsonResponse();
+            return (new HttpResponseUtility([], $e->errors(), $e->status))->getJsonResponse();
         }
         return parent::render($request, $e);
     }

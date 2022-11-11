@@ -95,11 +95,9 @@ class RegisterUserTest extends TestCase
 
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('username', $response['message']);
     }
 
     /**
@@ -111,11 +109,9 @@ class RegisterUserTest extends TestCase
 
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('username', $response['message']);
     }
 
     /**
@@ -129,11 +125,9 @@ class RegisterUserTest extends TestCase
         $userWithSameUsername = array_merge($this->generateUserData(), ['username' => $firstUserData['username']]);
         $response = $this->post('/api/v1/auth/register', $userWithSameUsername);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('username', $response['message']);
     }
 
     /**
@@ -144,11 +138,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['username' => Str::random(5)]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('username', $response['message']);
     }
 
     /**
@@ -159,11 +151,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['username' => Str::random(51)]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('username', $response['message']);
     }
 
     /**
@@ -174,11 +164,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['email' => '']);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('email', $response['message']);
     }
 
     /**
@@ -189,11 +177,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['email' => Str::random()]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('email', $response['message']);
     }
 
     /**
@@ -207,11 +193,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['email' => $firstUserData['email']]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('email', $response['message']);
     }
 
     /**
@@ -225,11 +209,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['email' => Str::random(101).'@test.test']);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('email', $response['message']);
     }
 
     /**
@@ -240,11 +222,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['password' => '', 'password_confirmation' => '']);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('password', $response['message']);
     }
 
     /**
@@ -256,11 +236,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['password' => $password, 'password_confirmation' => $password]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('password', $response['message']);
     }
 
     /**
@@ -271,11 +249,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['password_confirmation' => '']);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('password', $response['message']);
     }
 
     /**
@@ -287,11 +263,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['password' => $password, 'password_confirmation' => $password]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('password', $response['message']);
     }
 
     /**
@@ -303,11 +277,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['password' => $password, 'password_confirmation' => $password]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('password', $response['message']);
     }
 
     /**
@@ -318,11 +290,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['firstname' => '']);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('firstname', $response['message']);
     }
 
     /**
@@ -333,11 +303,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['firstname' => $this->faker->randomNumber()]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('firstname', $response['message']);
     }
 
     /**
@@ -348,11 +316,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['firstname' => Str::random(51)]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('firstname', $response['message']);
     }
 
     /**
@@ -363,11 +329,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['lastname' => '']);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('lastname', $response['message']);
     }
 
     /**
@@ -378,11 +342,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['lastname' => $this->faker->randomNumber()]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('lastname', $response['message']);
     }
 
     /**
@@ -393,11 +355,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['lastname' => Str::random(51)]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('lastname', $response['message']);
     }
 
     /**
@@ -408,11 +368,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['phone_number' => '']);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('phone_number', $response['message']);
     }
 
     /**
@@ -423,11 +381,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['phone_number' => $this->faker->randomNumber(4)]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('phone_number', $response['message']);
     }
 
     /**
@@ -438,11 +394,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['phone_number' => Str::random(41)]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('phone_number', $response['message']);
     }
 
     /**
@@ -453,11 +407,9 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['address' => '']);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $response->assertStatus(ResponseStatusCode::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('address', $response['message']);
     }
 
     /**
@@ -468,11 +420,8 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['address' => $this->faker->randomNumber(4)]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('address', $response['message']);
     }
 
     /**
@@ -483,10 +432,7 @@ class RegisterUserTest extends TestCase
         $data = array_merge($this->generateUserData(), ['address' => Str::random(256)]);
         $response = $this->post('/api/v1/auth/register', $data);
 
-        $response->assertStatus(ResponseStatusCode::HTTP_INTERNAL_SERVER_ERROR);
-        $response->assertJson([
-            'status' => 'failed',
-            'message' => 'A validation exception has ocurred',
-        ]);
+        $this->assertEquals('failed', $response['status']);
+        $this->assertArrayHasKey('address', $response['message']);
     }
 }

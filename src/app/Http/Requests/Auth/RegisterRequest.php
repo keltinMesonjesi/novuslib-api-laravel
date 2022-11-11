@@ -6,8 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
 {
-    protected $stopOnFirstFailure = true;
-
     /**
      * Get the validation rules that apply to the request.
      *
